@@ -25,7 +25,7 @@ class Command(BaseCommand):
             send_and_update_sms_states(*[DeliveryRequest(sms) for sms in to_check])
 
         idle_output_sms = OutputSMSModel.objects.filter(
-            state=ATS_STATES.OK, created_at__lt=now() + timedelta(minutes=settings.IDLE_MESSAGES_TIMEOUT_MINUTES)
+            state=ATS_STATES.OK, created_at__lt=now() - timedelta(minutes=settings.IDLE_MESSAGES_TIMEOUT_MINUTES)
         )
         if settings.LOG_IDLE_MESSAGES and idle_output_sms.exists():
             LOGGER.warning('{count_sms} Output SMS is more than {timeout} minutes in state "OK"'.format(
